@@ -4,13 +4,7 @@
       "id": 1,
       "name": "Yogurt",
       "category": "Dairy",
-      "isInCart": false
-    },
-    {
-      "id": 2,
-      "name": "Pomegranate",
-      "category": "Produce",
-      "isInCart": false
+      "isInCart": true
     },
     {
       "id": 3,
@@ -34,7 +28,19 @@
       "id": 6,
       "name": "Cookies",
       "category": "Dessert",
-      "isInCart": false
+      "isInCart": true
+    },
+    {
+      "name": "asd123",
+      "category": "Dairy",
+      "isInCart": false,
+      "id": 7
+    },
+    {
+      "name": "asd",
+      "category": "Produce",
+      "isInCart": false,
+      "id": 8
     }
   ]
 }
