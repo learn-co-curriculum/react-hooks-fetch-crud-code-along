@@ -2,10 +2,10 @@
 
 ## Learning Goals
 
-- Write `fetch` requests for `GET`, `POST`, `PATCH` and `DELETE`
+- Write `fetch` requests for `GET`, `POST`, `PATCH`, and `DELETE`
 - Initiate `fetch` requests with the `useEffect` hook
 - Initiate `fetch` requests from user events
-- Update state and trigger and re-render after receiving a response to the
+- Update state and trigger a re-render after receiving a response to the
   `fetch` request
 - Perform CRUD actions on arrays in state
 
@@ -49,7 +49,7 @@ $ npm run server
 This will run `json-server` on [http://localhost:4000](http://localhost:4000).
 Before moving ahead, open
 [http://localhost:4000/items](http://localhost:4000/items) in the browser and
-familarize yourself with the data. What are the important keys on each object?
+familiarize yourself with the data. What are the important keys on each object?
 
 Leave `json-server` running. Open a new terminal, and run React with:
 
@@ -154,7 +154,7 @@ To recap:
 
 ### Creating Items
 
-Our next goal will be to add a new items to our database on the server when a
+Our next goal will be to add a new item to our database on the server when a
 user submits the form. Once again, let's plan out our steps:
 
 - When X event occurs (_a user submits the form_)
@@ -246,12 +246,12 @@ check out the [MDN article on Using Fetch][using fetch].
 
 Try submitting the form once more. You should now see a new item logged to the
 console that includes an `id` attribute from the server. You can also verify the
-object was persisted by refreshing the page in the browser, and seeing the new
+object was persisted by refreshing the page in the browser and seeing the new
 item at the bottom of the shopping list.
 
 However, our goal isn't to make our users refresh the page to see their newly
 created item — we want it to show up as soon as it's been persisted. So we have
-one more step left: updating state.
+one more step left: **updating state**.
 
 For this final step, we need to consider:
 
@@ -352,9 +352,9 @@ function ItemForm({ onAddItem }) {
 
 Check your work by submitting the form once more. You should now see the new
 item logged to the console, this time from the `ShoppingList` component. We're
-getting close! As a last step, we need to call `setState` with a new array that
-has our new item at the end. Recall from our lessons on working with arrays in
-state that we can use the spread operator to perform this action:
+getting close! For the last step, we need to call `setState` with a new array
+that has our new item at the end. Recall from our lessons on working with arrays
+in state that we can use the spread operator to perform this action:
 
 ```js
 // src/components/ShoppingList.js
@@ -381,8 +381,8 @@ Let's recap our steps here:
     set state by creating a new array with our current items from state, plus
     new item at the end
 
-**Phew!** This is a good time to take a break before proceeding — we've got a
-few more steps to cover. Once you're ready and recharged, we'll dive back in.
+**Phew!** This is a good time to **take a break** before proceeding — we've got
+a few more steps to cover. Once you're ready and recharged, we'll dive back in.
 
 ### Updating Items
 
@@ -392,7 +392,7 @@ the basic steps for this action like so:
 
 - When X event occurs (_a user clicks the Add to Cart button_)
 - Make Y fetch request (_PATCH /items_)
-- Update Z state (_update the isInCart status for the item_)
+- Update Z state (_update the `isInCart` status for the item_)
 
 From here, we'll again need to **identify which component triggers the event**.
 Can you find where the "Add to Cart" button lives in our code? Yep! It's in the
@@ -424,9 +424,9 @@ function Item({ item }) {
 }
 ```
 
-Check your work by clicking this button for different items — you should each
-item being logged to the console. We are able to access the `item` variable in
-the `handleAddToCartClick` function thanks to JavaScript's scope rules.
+Check your work by clicking this button for different items — you should see
+each item logged to the console. We can access the `item` variable in the
+`handleAddToCartClick` function thanks to JavaScript's scope rules.
 
 Next, let's write out our `PATCH` request:
 
@@ -471,7 +471,7 @@ could theoretically make this approach work, it would be an anti-pattern: we'd
 be **duplicating state**, which makes our components harder to work with and
 more prone to bugs.
 
-We already have state in our application that tells us us which items are in the
+We already have state in our application that tells us which items are in the
 cart as part of the `items` state in our `ShoppingList` component. So instead of
 creating new state, our goal is to call `setItems` in the `ShoppingList` with a
 new list of items, where the `isInCart` state of our updated item matches its
@@ -591,7 +591,7 @@ Our delete button in the `Item` component, so we'll start by adding an event
 handler for clicks on the button:
 
 ```jsx
-// src/components/Item.jsx
+// src/components/Item.js
 
 function Item({ item, onUpdateItem }) {
   // ...rest of component
@@ -630,7 +630,7 @@ function handleDeleteClick() {
 
 Note that for a `DELETE` request, we must include the ID of the item we're
 deleting in the URL. We only need the `method` option — no `body` or `headers`
-are needed, since we don't have any additional data to send besides the ID.
+are needed since we don't have any additional data to send besides the ID.
 
 You can verify that the item was successfully deleted by clicking the button,
 checking that the console message of `"deleted!"` appears, and refreshing the
