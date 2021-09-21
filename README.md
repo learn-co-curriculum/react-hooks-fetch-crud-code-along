@@ -36,7 +36,6 @@ To get started, let's install our dependencies:
 
 ```console
 $ npm install
-$ npm run server
 ```
 
 Then, to run `json-server`, we'll be using the `server` script in the
@@ -90,12 +89,13 @@ which state we're trying to update. In our case, it's the `items` state which is
 held in the `ShoppingList` component.
 
 We can call the `useEffect` hook in the `ShoppingList` component to initiate our
-`fetch` request like so. Let's start by using `console.log` to ensure that our
-syntax is correct, and that we're fetching data from the server:
+`fetch` request. Let's start by using `console.log` to ensure that our syntax is
+correct, and that we're fetching data from the server:
 
 ```jsx
 // src/components/ShoppingList.js
 
+// import useEffect
 import React, { useEffect, useState } from "react";
 // ...rest of imports
 
@@ -103,6 +103,7 @@ function ShoppingList() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [items, setItems] = useState([]);
 
+  // Add useEffect hook
   useEffect(() => {
     fetch("http://localhost:4000/items")
       .then((r) => r.json())
@@ -128,6 +129,7 @@ function ShoppingList() {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [items, setItems] = useState([]);
 
+    // Update state by passing the array of items to setItems  
   useEffect(() => {
     fetch("http://localhost:4000/items")
       .then((r) => r.json())
@@ -173,6 +175,7 @@ function ItemForm() {
   const [name, setName] = useState("");
   const [category, setCategory] = useState("Produce");
 
+  // Add function to handle submissions
   function handleSubmit(e) {
     e.preventDefault();
     console.log("name:", name);
@@ -180,6 +183,7 @@ function ItemForm() {
   }
 
   return (
+    // Set up the form to call handleSubmit when the form is submitted
     <form className="NewItem" onSubmit={handleSubmit}>
       {/** ...form inputs here */}
     </form>
@@ -204,6 +208,8 @@ Let's create this item in our `handleSubmit` function using the data from the
 form state:
 
 ```js
+// src/components/ItemForm.js
+
 function handleSubmit(e) {
   e.preventDefault();
   const itemData = {
@@ -256,19 +262,19 @@ one more step left: **updating state**.
 For this final step, we need to consider:
 
 - Which component owns the state that we're trying to update?
-- How can we get the data from this component to the component that owns state?
+- How can we get the data from the `ItemForm` component to the component that
+  owns state?
 - How do we correctly update state?
 
 For the first question, we're trying to update state in the `ShoppingList`
 component. Our goal is to display the new item in the list alongside the other
 items, and this is the component that is responsible for that part of our
-application. The `ShoppingList` component is a **parent** component to the
-`ItemForm` component, so we'll need to **pass a callback function as a prop** so
+application. Since the `ShoppingList` component is a **parent** component to the
+`ItemForm` component, we'll need to **pass a callback function as a prop** so
 that the `ItemForm` component can send the new item up to the `ShoppingList`.
 
-Let's add a `handleAddItem` function to the `ShoppingList`, and pass a reference
-to that function as a prop of `onAddItem` to the `ItemForm` being returned in
-the JSX:
+Let's add a `handleAddItem` function to `ShoppingList`, and pass a reference to
+that function as a prop called `onAddItem` to the `ItemForm`:
 
 ```jsx
 // src/components/ShoppingList.js
@@ -374,12 +380,12 @@ Let's recap our steps here:
   - When a user submits the `ItemForm`, handle the form submit event and access
     data from the form using state
 - Make Y fetch request
-  - Make a `POST` request to `/items`, using the form data in the **body** of
+  - Make a `POST` request to `/items`, passing the form data in the **body** of
     the request, and access the newly created item in the response
 - Update Z state
   - Send the item from the fetch response to the `ShoppingList` component, and
     set state by creating a new array with our current items from state, plus
-    new item at the end
+    the new item at the end
 
 **Phew!** This is a good time to **take a break** before proceeding — we've got
 a few more steps to cover. Once you're ready and recharged, we'll dive back in.
@@ -403,6 +409,7 @@ button:
 // src/components/Item.js
 
 function Item({ item }) {
+  // Add function to handle button click
   function handleAddToCartClick() {
     console.log("clicked item:", item);
   }
@@ -434,6 +441,7 @@ Next, let's write out our `PATCH` request:
 // src/components/Item.js
 
 function handleAddToCartClick() {
+  // add fetch request
   fetch(`http://localhost:4000/items/${item.id}`, {
     method: "PATCH",
     headers: {
@@ -471,11 +479,10 @@ could theoretically make this approach work, it would be an anti-pattern: we'd
 be **duplicating state**, which makes our components harder to work with and
 more prone to bugs.
 
-We already have state in our application that tells us which items are in the
-cart as part of the `items` state in our `ShoppingList` component. So instead of
-creating new state, our goal is to call `setItems` in the `ShoppingList` with a
-new list of items, where the `isInCart` state of our updated item matches its
-state on the server.
+We already have state in our `ShoppingList` component that tells us which items
+are in the cart. So instead of creating new state, our goal is to call
+`setItems` in the `ShoppingList` component with a new list of items, where the
+`isInCart` state of our updated item matches its state on the server.
 
 Just like with our `ItemForm` deliverable, let's start by creating a callback
 function in the `ShoppingList` component and passing it as a prop to the `Item`
@@ -523,10 +530,12 @@ In the `Item` component, we can destructure the `onUpdateItem` prop and call it
 when we have the updated item response from the server:
 
 ```jsx
-// src/components/ShoppingList.js
+// src/components/Item.js
 
+// Destructure the onUpdateItem prop
 function Item({ item, onUpdateItem }) {
   function handleAddToCartClick() {
+    // Call onUpdateItem, passing the data returned from the fetch request
     fetch(`http://localhost:4000/items/${item.id}`, {
       method: "PATCH",
       headers: {
@@ -552,6 +561,8 @@ working with arrays in state that we can use `.map` to help create this new
 array:
 
 ```js
+// src/components/ShoppingList.js
+
 function handleUpdateItem(updatedItem) {
   const updatedItems = items.map((item) => {
     if (item.id === updatedItem.id) {
@@ -564,7 +575,7 @@ function handleUpdateItem(updatedItem) {
 }
 ```
 
-Clicking the button should now toggle the `isInItem` property of any item in the
+Clicking the button should now toggle the `isInCart` property of any item in the
 list on the server as well as in our React state! To recap:
 
 - When X event occurs
@@ -574,8 +585,8 @@ list on the server as well as in our React state! To recap:
     the ID and body of the request, and access the updated item in the response
 - Update Z state
   - Send the item from the fetch response to the `ShoppingList` component, and
-    set state by creating a new array by replacing the old item with our updated
-    item
+    set state by creating a new array which contains the updated item in place
+    of the old item
 
 ### Deleting Items
 
@@ -587,7 +598,7 @@ remove items from their shopping list:
 - Update Z state (_remove the item from the list_)
 
 From here, we'll again need to **identify which component triggers the event**.
-Our delete button in the `Item` component, so we'll start by adding an event
+Our delete button is in the `Item` component, so we'll start by adding an event
 handler for clicks on the button:
 
 ```jsx
@@ -641,8 +652,8 @@ items are being displayed is the `items` state in the `ShoppingList` component,
 so we need to call `setItems` in that component with a new list of items that
 **does not contain our deleted item**.
 
-We'll pass callback down from `ShoppingList` to `Item`, just like we did for the
-update action:
+We'll pass a callback down from `ShoppingList` to `Item`, just like we did for
+the update action:
 
 ```jsx
 // src/components/ShoppingList.js
@@ -691,10 +702,12 @@ Call the `onDeleteItem` prop in the `Item` component once the item has been
 deleted from the server, and pass up the item that was clicked:
 
 ```jsx
-// src/components/ShoppingList.js
+// src/components/Item.js
 
+// Deconstruct the onDeleteItem prop
 function Item({ item, onUpdateItem, onDeleteItem }) {
   function handleDeleteClick() {
+    // Call onDeleteItem, passing the deleted item
     fetch(`http://localhost:4000/items/${item.id}`, {
       method: "DELETE",
     })
@@ -726,14 +739,14 @@ as well as in our React state! To recap:
     the ID
 - Update Z state
   - Send the clicked item to the `ShoppingList` component, and set state by
-    creating a new array by filtering out the deleted item from the list
+    creating a new array in which the deleted item has been filtered out
 
 ## Conclusion
 
 Synchronizing state between a client-side application and a server-side
-application is a challenging problem! Thankfully, the general steps to remember
-to accomplish this in React are the same regardless of what kind of action we
-are performing:
+application is a challenging problem! Thankfully, the general steps to
+accomplish this in React are the same regardless of what kind of action we are
+performing:
 
 - When X event occurs
 - Make Y fetch request
