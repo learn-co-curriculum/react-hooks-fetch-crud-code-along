@@ -723,6 +723,7 @@ deleted item from the list. Recall from our lessons on working with arrays in
 state that we can use `.filter` to help create this new array:
 
 ```js
+// src/components/ShoppingList.js
 function handleDeleteItem(deletedItem) {
   const updatedItems = items.filter((item) => item.id !== deletedItem.id);
   setItems(updatedItems);
