@@ -5,8 +5,8 @@ import {
   fireEvent,
   waitForElementToBeRemoved,
 } from "@testing-library/react";
-import { resetData } from "./mocks/handlers";
-import { server } from "./mocks/server";
+import { resetData } from "../mocks/handlers";
+import { server } from "../mocks/server";
 import ShoppingList from "../components/ShoppingList";
 
 beforeAll(() => server.listen());
