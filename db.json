@@ -10,13 +10,13 @@
       "id": 2,
       "name": "Pomegranate",
       "category": "Produce",
-      "isInCart": false
+      "isInCart": true
     },
     {
       "id": 3,
       "name": "Lettuce",
       "category": "Produce",
-      "isInCart": false
+      "isInCart": true
     },
     {
       "id": 4,
@@ -35,6 +35,66 @@
       "name": "Cookies",
       "category": "Dessert",
       "isInCart": false
+    },
+    {
+      "name": "pie",
+      "category": "Dessert",
+      "isInCart": true,
+      "id": 7
+    },
+    {
+      "name": "pie",
+      "category": "Dessert",
+      "isInCart": true,
+      "id": 8
+    },
+    {
+      "name": "maize",
+      "category": "Produce",
+      "isInCart": true,
+      "id": 9
+    },
+    {
+      "name": "maize",
+      "category": "Produce",
+      "isInCart": false,
+      "id": 10
+    },
+    {
+      "name": "maize",
+      "category": "Produce",
+      "isInCart": false,
+      "id": 11
+    },
+    {
+      "name": "maize",
+      "category": "Produce",
+      "isInCart": false,
+      "id": 12
+    },
+    {
+      "name": "maize",
+      "category": "Produce",
+      "isInCart": false,
+      "id": 13
+    },
+    {
+      "name": "maize",
+      "category": "Produce",
+      "isInCart": false,
+      "id": 14
+    },
+    {
+      "name": "",
+      "category": "Produce",
+      "isInCart": false,
+      "id": 15
+    },
+    {
+      "name": "",
+      "category": "Produce",
+      "isInCart": false,
+      "id": 16
     }
   ]
 }
